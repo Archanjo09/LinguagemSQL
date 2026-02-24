@@ -1,6 +1,6 @@
 ## 1. DDL — Linguagem de Definição de Dados
 
-O **DDL (Data Definition Language)** é o "blueprint" do sistema. Ele define a estrutura, as regras e o esqueleto do banco de dados.
+O DDL (Data Definition Language) é o "blueprint" do sistema. Ele define a estrutura, as regras e o esqueleto do banco de dados.
 
 ### `CREATE` (Construir)
 
@@ -49,7 +49,7 @@ DROP TABLE produto;
 
 ## 2. DML — Linguagem de Manipulação de Dados
 
-O **DML (Data Manipulation Language)** gerencia o conteúdo, ou seja, as linhas de dados dentro das tabelas.
+O DML (Data Manipulation Language)** gerencia o conteúdo, ou seja, as linhas de dados dentro das tabelas.
 
 ###  `INSERT` (Adicionar)
 
@@ -66,7 +66,7 @@ VALUES (1, 'Luquinhas', '12345678901');
 Modifica dados existentes.
 
 > [!IMPORTANT]
-> **Sempre use a cláusula `WHERE**`. Sem ela, todos os registros da tabela serão alterados!
+> Sempre use a cláusula `WHERE`. Sem ela, todos os registros da tabela serão alterados!
 
 ```sql
 UPDATE produto 
@@ -92,15 +92,15 @@ DELETE FROM produto;
 
 ## 3. DQL — Linguagem de Consulta de Dados
 
-O **DQL (Data Query Language)** foca na recuperação e visualização das informações.
+O DQL (Data Query Language) foca na recuperação e visualização das informações.
 
 ### `SELECT`
 
 O comando mais utilizado no SQL para buscar e filtrar dados.
 
-* **SELECT ***: Busca todas as colunas.
-* **Aliases (`AS`)**: Apelidos temporários para colunas ou tabelas.
-* **ORDER BY**: Define a ordem de exibição (`ASC` para crescente, `DESC` para decrescente).
+* SELECT: Busca todas as colunas.
+* Aliases (`AS`): Apelidos temporários para colunas ou tabelas.
+* ORDER BY: Define a ordem de exibição (`ASC` para crescente, `DESC` para decrescente).
 
 ```sql
 -- Selecionando colunas específicas com alias e ordenação
@@ -111,13 +111,3 @@ FROM produto AS prod
 ORDER BY id DESC;
 
 ```
-
----
-
-### Dicas de Ouro
-
-1. **DDL** mexe no "balde" (tabela).
-2. **DML** mexe no "conteúdo" (água dentro do balde).
-3. **DQL** apenas olha o que tem dentro.
-
----
