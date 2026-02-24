@@ -25,7 +25,7 @@ ALTER TABLE produto ADD COLUMN situacao BOOLEAN;
 DROP TABLE produto;
 
 
-2. DML — Linguagem de Manipulação de Dados
+**2. DML — Linguagem de Manipulação de Dados\**
 
 Lida com os registros (as linhas) dentro das tabelas.
 
