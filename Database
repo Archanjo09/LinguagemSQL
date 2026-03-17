@@ -1,3 +1,5 @@
+SUPERMERCADO
+
 -- create database supermercado;
  
 --create table cliente (
@@ -24,3 +26,86 @@
  
 drop table produto
  
+
+
+
+
+
+LOJA
+
+drop table if exists pedidos;
+drop table if exists produtos;
+drop table if exists leads_potenciais;
+drop table if exists clientes;
+
+CREATE TABLE public.clientes (
+	id int NOT NULL,
+	nome varchar(50) NOT NULL,
+	cidade varchar(50) NULL,
+	CONSTRAINT clientes_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE public.leads_potenciais (
+	id int NOT NULL,
+	nome varchar(50) NULL,
+	email varchar(50) NULL,
+	CONSTRAINT leads_potenciais_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE public.produtos (
+	id int NOT NULL,
+	nomeproduto varchar(100) NOT NULL,
+	precopadrao numeric(10, 2) NULL,
+	CONSTRAINT produtos_pkey PRIMARY KEY (id)
+);
+
+
+CREATE TABLE public.pedidos (
+	id int NOT NULL,
+	clienteid int NULL,
+	produtoid int NULL,
+	quantidade int NULL,
+	precovenda numeric(10, 2) NULL,
+	CONSTRAINT pedidos_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_cliente_pedido FOREIGN KEY (clienteid) REFERENCES public.clientes(id),
+	CONSTRAINT fk_produto_pedido FOREIGN KEY (produtoid) REFERENCES public.produtos(id)
+);
+
+INSERT INTO Produtos (Id, NomeProduto, PrecoPadrao) VALUES
+(10, 'Notebook Pro', 4500.00),
+(11, 'Rato Sem Fio', 120.00),
+(12, 'Monitor 24"', 950.00),
+(13, 'Teclado Mecânico', 350.00),
+(14, 'Webcam HD', 250.00),
+(15, 'Smartphone High', 2800.00),
+(16, 'Placa de Vídeo', 6000.00);
+
+INSERT INTO Clientes (Id, Nome, Cidade) VALUES
+(1, 'Maria Silva', 'São Paulo'),
+(2, 'João Pereira', 'Rio de Janeiro'),
+(3, 'Ana Costa', 'Curitiba'),
+(4, 'Ricardo Santos', 'Belo Horizonte'),
+(5, 'Beatriz Oliveira', 'Porto Alegre'),
+(6, 'Carlos Souza', 'Salvador'),
+(7, 'Fernanda Lima', 'Recife'),
+(8, 'Paulo Rocha', 'Brasília');
+
+INSERT INTO Pedidos (Id, ClienteID, ProdutoID, Quantidade, PrecoVenda) VALUES
+(101, 1, 10, 1, 4500.00), -- Maria comprou Notebook
+(102, 1, 11, 2, 110.00),  -- Maria comprou 2 Ratos (com desconto)
+(103, 2, 12, 1, 950.00),  -- João comprou Monitor
+(104, 4, 13, 1, 350.00),  -- Ricardo comprou Teclado
+(105, 5, 15, 1, 2800.00), -- Beatriz comprou Smartphone
+(106, 1, 14, 1, 250.00),  -- Maria comprou Webcam
+(107, 6, 14, 1, 250.00),  -- Carlos comprou Webcam
+(108, 2, 11, 1, 120.00),  -- João comprou Rato
+(109, 7, 10, 1, 4300.00); -- Fernanda comprou Notebook (com desconto)
+
+
+INSERT INTO Leads_Potenciais (Id, Nome, Email) VALUES
+(1, 'Maria Silva', 'maria@email.com'),     -- Já é cliente
+(2, 'João Pereira', 'joao@email.com'),     -- Já é cliente
+(3, 'Roberto Alves', 'roberto@test.com'),   -- Apenas Lead
+(4, 'Sónia Mendes', 'sonia@test.com'),     -- Apenas Lead
+(5, 'Lucas Neto', 'lucas@test.com'),       -- Apenas Lead
+(6, 'Daniela Paz', 'daniela@test.com');    -- Apenas Lead
