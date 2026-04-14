@@ -109,3 +109,106 @@ INSERT INTO Leads_Potenciais (Id, Nome, Email) VALUES
 (4, 'Sónia Mendes', 'sonia@test.com'),     -- Apenas Lead
 (5, 'Lucas Neto', 'lucas@test.com'),       -- Apenas Lead
 (6, 'Daniela Paz', 'daniela@test.com');    -- Apenas Lead
+
+select 
+	p.id as pedido_id,
+	c.id cliente_id,
+	c.nome,
+	p2.nomeproduto 
+from 
+	pedidos p inner join clientes c on p.clienteid = c.id
+			  inner join produtos p2 on p2.id = p.produtoid
+where
+	c.id = 1
+	
+	
+select
+     prod.id produtoid,
+     prod.nomeproduto,
+     ped.id pedido_id
+from 
+    pedidos ped right join produtos prod on ped.produtoid = prod.id
+    
+    select distinct prod.nomeproduto  from pedidos ped inner join produtos prod on ped.produtoid  = prod.id
+    
+    select NOME from CLIENTES
+
+union 
+
+select NOME from leads_potenciais lp 
+
+select NOME from CLIENTES
+
+union all
+
+select NOME from leads_potenciais lp
+
+select NOME from CLIENTES
+
+intersect
+
+select NOME from leads_potenciais lp
+
+select NOME from CLIENTES
+
+except
+
+select NOME from leads_potenciais lp
+
+
+select upper(c.nome)  from clientes c
+ 
+select length(c.nome)  from clientes c
+ 
+select replace(upper (c.nome), 'A', '4')  from clientes c
+
+select cli.nome, coalesce(cast(ped.id as varchar), 'não comprou')  from pedidos ped right join clientes cli on ped.clienteid = cli.id
+
+
+select
+ count(*),
+ sum(precovenda),
+ avg(precovenda),
+ max(precovenda),
+ min(precovenda)
+from
+ pedidos
+ 
+ 
+ select
+ c.nome,
+ sum(p.precovenda * p.quantidade )
+from
+ pedidos p inner join clientes c  on p.clienteid  = c.id 
+group by
+ c.nome
+
+ 
+ select
+ prod.nomeproduto,
+ count(pe.quantidade)
+from 
+ produtos prod left join pedidos pe on prod.id  = pe.produtoid
+group by
+ prod.nomeproduto 
+ 
+ 
+ select
+ prod.nomeproduto,
+ count(pe.quantidade)
+from 
+ produtos prod left join pedidos pe on prod.id  = pe.produtoid
+group by
+ prod.nomeproduto
+having -- where do group by
+ count(pe.quantidade) >= 2
+ 
+ select
+ id,
+ nome,
+ coalesce(email, 'sem email'),
+ coalesce(cidade, 'sem cidade')
+from
+ (select id, nome, null as email , cidade from clientes
+  union
+ select id, nome, email, null as cidade from leads_potenciais lp )
