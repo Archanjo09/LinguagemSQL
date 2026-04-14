@@ -173,3 +173,115 @@ Normalizar é organizar o banco para que cada dado exista em um único lugar, ev
 3.  **3FN (Dependência Transitiva):** Deve estar na 2FN. Campos que não são chave devem depender exclusivamente da chave primária e de mais nada.
 
 > **Resultado:** Um banco normalizado é mais eficiente, confiável e fácil de escalar.
+
+---
+
+## 8. Funções em Linha (Scalar Functions)
+
+As funções em linha processam cada registro individualmente e retornam um valor transformado para cada linha da consulta.
+
+### Tipos de Funções
+
+- **Strings**:
+  - `UPPER()` → Converte para maiúsculas  
+  - `LOWER()` → Converte para minúsculas  
+  - `CONCAT()` → Une textos  
+
+- **Numéricas**:
+  - `ROUND()` → Arredonda valores  
+  - `ABS()` → Retorna o valor absoluto  
+
+- **Data**:
+  - `CURRENT_DATE` → Data atual  
+  - `EXTRACT()` → Extrai partes da data (ano, mês, etc.)  
+
+### Exemplo em SQL
+
+```sql
+SELECT 
+    UPPER(nome) AS nome_maiusculo,
+    CONCAT('R$ ', preco) AS preco_formatado
+FROM produto;
+```
+
+## 9. Funções de Agregação
+
+Diferente das funções em linha, as de agregação processam um conjunto de valores e retornam um único valor resumido.
+
+### Funções
+
+| Função  | Descrição                                      |
+|---------|----------------------------------------------|
+| COUNT() | Conta o número de registros.                 |
+| SUM()   | Soma os valores de uma coluna numérica.      |
+| AVG()   | Calcula a média aritmética.                  |
+| MAX()   | Retorna o maior valor encontrado.            |
+| MIN()   | Retorna o menor valor encontrado.            |
+
+### Exemplo em SQL
+
+```sql
+-- Exemplo: Total de produtos em estoque e preço médio
+SELECT 
+    COUNT(*) AS total_itens, 
+    AVG(preco) AS media_precos 
+FROM produto;
+
+```
+## 10. Agrupamento (GROUP BY e HAVING)
+
+O `GROUP BY` é utilizado para separar os dados em grupos e aplicar funções de agregação a cada grupo individualmente.
+
+- **GROUP BY**: Agrupa linhas que têm os mesmos valores em colunas específicas.  
+- **HAVING**: Funciona como um `WHERE`, mas para filtros após a agregação ter sido realizada.
+
+### Exemplo em SQL
+
+```sql
+-- Exemplo: Ver o total de vendas por categoria, apenas onde o total supera 500
+SELECT 
+    categoria, 
+    SUM(valor_venda) AS total_por_categoria
+FROM vendas
+GROUP BY categoria
+HAVING SUM(valor_venda) > 500;
+
+```
+
+---
+
+## 11. Operadores SET (Combinação Vertical)
+
+Enquanto os `JOINS` combinam colunas lateralmente, os operadores `SET` empilham os resultados de duas ou mais consultas.
+
+### Operadores
+
+- **UNION** → Combina os resultados e remove linhas duplicadas  
+- **UNION ALL** → Combina todos os resultados, mantendo as duplicatas (mais rápido)  
+- **INTERSECT** → Retorna apenas os registros que aparecem em ambas as consultas  
+- **EXCEPT** → Retorna registros da primeira consulta que não existem na segunda  
+
+### Exemplo em SQL
+
+```sql
+-- Exemplo: Lista única de nomes de clientes e fornecedores
+SELECT nome FROM cliente
+UNION
+SELECT nome FROM fornecedor;
+
+```
+
+---
+
+## 12. Ordem Lógica Completa de Execução
+
+Para consultas complexas, o banco de dados segue esta ordem rigorosa de processamento:
+
+1. `FROM / JOIN` → Localiza as tabelas e as conecta  
+2. `WHERE` → Filtra as linhas individuais  
+3. `GROUP BY` → Agrupa os dados  
+4. `HAVING` → Filtra os grupos gerados  
+5. `SELECT` → Define quais colunas serão exibidas  
+6. `DISTINCT` → Remove duplicatas do resultado  
+7. `ORDER BY` → Organiza a exibição final  
+8. `LIMIT / OFFSET` → Restringe a quantidade de linhas retornadas
