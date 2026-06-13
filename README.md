@@ -285,3 +285,105 @@ Para consultas complexas, o banco de dados segue esta ordem rigorosa de processa
 6. `DISTINCT` → Remove duplicatas do resultado  
 7. `ORDER BY` → Organiza a exibição final  
 8. `LIMIT / OFFSET` → Restringe a quantidade de linhas retornadas
+
+## 13. Functions (Funções)
+Funções são blocos de código reutilizáveis desenvolvidos para realizar cálculos ou manipulações de dados e obrigatoriamente retornar um valor.
+
+Uso: Podem ser chamadas diretamente dentro de uma cláusula SELECT, WHERE ou ORDER BY.
+
+Deterministicas: Geralmente processam parâmetros de entrada e devolvem um resultado processado.
+
+SQL
+-- Exemplo de criação de uma função de desconto
+CREATE FUNCTION calcular_desconto(valor NUMERIC, porcentagem NUMERIC)
+RETURNS NUMERIC AS $$
+BEGIN
+    RETURN valor - (valor * (porcentagem / 100));
+END;
+$$ LANGUAGE plpgsql;
+
+-- Utilizando a função em uma consulta
+SELECT nome, calcular_desconto(preco, 10) AS preco_com_desconto FROM produtos;
+
+## 14. Stored Procedures (Procedimentos Armazenados)
+Diferente das funções, as PROCEDURES são executadas para realizar ações e tarefas lógicas complexas no banco de dados.
+
+Flexibilidade: Não têm a obrigação de retornar um valor.
+
+Transações: Podem gerenciar transações internas (COMMIT e ROLLBACK), o que não é permitido dentro de funções comuns em muitos bancos.
+
+SQL
+-- Criando uma Procedure para atualizar preços em lote
+CREATE PROCEDURE atualizar_preco_categoria(categoria_id INT, percentual NUMERIC)
+AS $$
+BEGIN
+    UPDATE produtos 
+    SET preco = preco * (1 + (percentual / 100))
+    WHERE id_categoria = categoria_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Executando a Procedure
+CALL atualizar_preco_categoria(5, 12.5);
+
+## 15. Triggers (Gatilhos)
+Um TRIGGER é um gatilho automático executado pelo próprio banco de dados sempre que um evento de modificação (INSERT, UPDATE ou DELETE) ocorre em uma tabela.
+
+Uso comum: Auditoria de alterações, validações complexas e sincronização automática de dados.
+
+SQL
+-- Criando a função que o gatilho vai disparar
+CREATE FUNCTION log_alteracao_preco() RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO historico_precos(produto_id, preco_antigo, data_alteracao)
+    VALUES (OLD.id, OLD.preco, NOW());
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Criando o Trigger associado à tabela de produtos
+CREATE TRIGGER tg_auditoria_preco
+AFTER UPDATE OF preco ON produtos
+FOR EACH ROW
+EXECUTE FUNCTION log_alteracao_preco();
+
+## 16. TCL — Linguagem de Controle de Transações
+O TCL (Transaction Control Language) gerencia as mudanças feitas pelas instruções DML, agrupando-as em blocos de operações seguras chamadas transações (Tudo ou Nada).
+
+COMMIT: Grava permanentemente as alterações no banco de dados.
+
+ROLLBACK: Cancela todas as alterações feitas desde o início da transação se algo der errado.
+
+SAVEPOINT: Cria um ponto de restauração intermediário dentro da transação.
+
+SQL
+-- Iniciando uma transação
+BEGIN;
+
+UPDATE contas SET saldo = saldo - 100 WHERE id = 1;
+UPDATE contas SET saldo = saldo + 100 WHERE id = 2;
+
+-- Se houver erro em algum passo:
+ROLLBACK;
+
+-- Se tudo ocorrer com sucesso:
+COMMIT;
+
+## 17. DCL — Linguagem de Controle de Dados
+O DCL (Data Control Language) gerencia as permissões de acesso aos objetos do banco de dados, controlando a segurança.
+
+GRANT (Conceder Privilégio)
+Dá permissão para um usuário realizar ações específicas.
+
+SQL
+-- Concedendo permissão de leitura na tabela clientes para o usuário lucas
+GRANT SELECT ON clientes TO lucas;
+REVOKE (Revogar Privilégio)
+Remove um privilégio previamente concedido.
+
+[!IMPORTANT]
+Use o controle de acessos (DCL) para garantir o princípio do privilégio mínimo, evitando vazamentos e alterações indevidas por usuários ou aplicações não autorizadas.
+
+SQL
+-- Retirando a permissão de exclusão da tabela de produtos do usuário lucas
+REVOKE DELETE ON produtos FROM lucas;
