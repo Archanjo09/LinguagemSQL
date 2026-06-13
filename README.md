@@ -293,7 +293,7 @@ Uso: Podem ser chamadas diretamente dentro de uma cláusula SELECT, WHERE ou ORD
 
 Deterministicas: Geralmente processam parâmetros de entrada e devolvem um resultado processado.
 
-SQL
+````SQL
 -- Exemplo de criação de uma função de desconto
 CREATE FUNCTION calcular_desconto(valor NUMERIC, porcentagem NUMERIC)
 RETURNS NUMERIC AS $$
@@ -301,7 +301,7 @@ BEGIN
     RETURN valor - (valor * (porcentagem / 100));
 END;
 $$ LANGUAGE plpgsql;
-
+````
 -- Utilizando a função em uma consulta
 SELECT nome, calcular_desconto(preco, 10) AS preco_com_desconto FROM produtos;
 
@@ -312,7 +312,7 @@ Flexibilidade: Não têm a obrigação de retornar um valor.
 
 Transações: Podem gerenciar transações internas (COMMIT e ROLLBACK), o que não é permitido dentro de funções comuns em muitos bancos.
 
-SQL
+````SQL
 -- Criando uma Procedure para atualizar preços em lote
 CREATE PROCEDURE atualizar_preco_categoria(categoria_id INT, percentual NUMERIC)
 AS $$
@@ -322,7 +322,7 @@ BEGIN
     WHERE id_categoria = categoria_id;
 END;
 $$ LANGUAGE plpgsql;
-
+````
 -- Executando a Procedure
 CALL atualizar_preco_categoria(5, 12.5);
 
@@ -331,7 +331,7 @@ Um TRIGGER é um gatilho automático executado pelo próprio banco de dados semp
 
 Uso comum: Auditoria de alterações, validações complexas e sincronização automática de dados.
 
-SQL
+````SQL
 -- Criando a função que o gatilho vai disparar
 CREATE FUNCTION log_alteracao_preco() RETURNS TRIGGER AS $$
 BEGIN
@@ -340,7 +340,7 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
+````
 -- Criando o Trigger associado à tabela de produtos
 CREATE TRIGGER tg_auditoria_preco
 AFTER UPDATE OF preco ON produtos
@@ -356,7 +356,7 @@ ROLLBACK: Cancela todas as alterações feitas desde o início da transação se
 
 SAVEPOINT: Cria um ponto de restauração intermediário dentro da transação.
 
-SQL
+```SQL
 -- Iniciando uma transação
 BEGIN;
 
@@ -368,6 +368,8 @@ ROLLBACK;
 
 -- Se tudo ocorrer com sucesso:
 COMMIT;
+```
+
 
 ## 17. DCL — Linguagem de Controle de Dados
 O DCL (Data Control Language) gerencia as permissões de acesso aos objetos do banco de dados, controlando a segurança.
@@ -375,15 +377,17 @@ O DCL (Data Control Language) gerencia as permissões de acesso aos objetos do b
 GRANT (Conceder Privilégio)
 Dá permissão para um usuário realizar ações específicas.
 
-SQL
+```SQL
 -- Concedendo permissão de leitura na tabela clientes para o usuário lucas
 GRANT SELECT ON clientes TO lucas;
 REVOKE (Revogar Privilégio)
 Remove um privilégio previamente concedido.
 
+```
+
 [!IMPORTANT]
 Use o controle de acessos (DCL) para garantir o princípio do privilégio mínimo, evitando vazamentos e alterações indevidas por usuários ou aplicações não autorizadas.
 
-SQL
+````SQL
 -- Retirando a permissão de exclusão da tabela de produtos do usuário lucas
 REVOKE DELETE ON produtos FROM lucas;
