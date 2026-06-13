@@ -385,7 +385,6 @@ Remove um privilégio previamente concedido.
 
 ```
 
-[!IMPORTANT]
 Use o controle de acessos (DCL) para garantir o princípio do privilégio mínimo, evitando vazamentos e alterações indevidas por usuários ou aplicações não autorizadas.
 
 ````SQL
